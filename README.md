@@ -2,4 +2,15 @@
 
 The trouble with developing augmented reality and live image processing apps is that you often have to test specific frames of the camera's input for debugging purposes. Were the contours drawn? Is the perspective fixed? Do I need to adjust this threshold?
 
-iOS debugging tools require you to set breakpoints and use quick look to see if the image/frame is processing in the way you intended. This stops the running of your app, it takes a long time, and often quick look inexplicably fails to capture any data. ImageDebugger solves this by capturing and storing any image at any part of the processing lifecycle, and uploading it to your Firebase Firestore server, which in turn feeds new images to a live web client you can run on your computer.
+With iOS debugging, you set breakpoints and use quick look to see if the image is processing in the way you intended. This stops the running of your app, it's tedious and slow, and often quick look inexplicably fails to capture any data. ImageDebugger solves this by capturing and storing any image at any part of the processing lifecycle and uploading it to your Firebase Firestore server, which in turn feeds new images to a live web client you can run on your computer.
+
+## How it works
+
+- Code: One class in Swift (`ImageDebugger`) that you can download and drop into your project, for near-instantaneous use.
+
+- Dependencies: Any images you log are uploaded to Firebase Cloud Storage, and the references to each image are stored and organized in Firestore. If using CocoaPods, add `pod 'Firebase/Firestore'` and `pod 'Firebase/Storage'` to your Podfile.
+
+- Firebase: To setup your own Cloud Storage and Firestore instances, [create a new project](http://console.firebase.google.com) with Firebase and perform the iOS setup procedures (adding the GoogleService-Info.plist and so on).
+
+- Web Client: Use MAMP or your favorite localhost tool to setup a server for the /Web directory, which will display all the images as you log them.
+
