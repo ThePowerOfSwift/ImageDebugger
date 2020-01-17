@@ -1,41 +1,43 @@
 var db = firebase.firestore();
 
-// Get latest session
 var sessionsRef = db.collection('sessions');
+
+// Get latest session info
 sessionsRef.orderBy('sessionStartTime', 'desc').limit(1)
-.get()
-.then(function(sessionSnapshot) {
+.onSnapshot(function(sessionSnapshot) {
 	sessionSnapshot.forEach(function(sessionDoc) {
-		var sessionData = sessionDoc.data();
-		updateUIWithSessionStartTime(sessionData.sessionStartTime.toDate());
-
-		// Get every image in the images subcollection
-		var imagesRef = sessionsRef.doc(sessionDoc.id).collection('images');
-		imagesRef.orderBy('captureTime', 'asc')
-		.get()
-		.then(function(imagesSnapshot) {
-			imagesSnapshot.forEach(function(image) {
-				// Add it to the UI
-				var imgData = image.data();
-				updateUIWithImage(imgData.captureTime.toDate(),
-								  imgData.link,
-								  imgData.message);
-			});
-		});
-
-		// Listen for any new images that are added
-		imagesRef.onSnapshot(function(imagesSnapshot) {
-			imagesSnapshot.docChanges().forEach(function(change) {
-				if (change.type == "added") {
-					var imgData = change.doc.data();
-					updateUIWithImage(imgData.captureTime.toDate(),
-									  imgData.link,
-									  imgData.message);
-				}
-			});
-		});
+		// NEW SESSION
+		clearOldData();
+		getDataFromSession(sessionDoc);
 	});
 });
+
+// Remove all images on the page
+function clearOldData() {
+	$('#images').empty();
+}
+
+// Get and insert all images from session doc
+function getDataFromSession(sessionDoc) {
+	// Update the session info header
+	var sessionData = sessionDoc.data();
+	updateUIWithSessionStartTime(sessionData.sessionStartTime.toDate());
+
+	// Listen for new images from the images subcollection
+	// (inital query contains all existing images as well)
+	var imagesRef = sessionsRef.doc(sessionDoc.id).collection('images');
+	imagesRef.orderBy('captureTime', 'asc').onSnapshot(function(imageSnapshot) {
+		imageSnapshot.docChanges().forEach(function(change) {
+			if (change.type === "added") {
+				// NEW IMAGE
+				var data = change.doc.data();
+				updateUIWithImage(data.captureTime.toDate(),
+							  	  data.link,
+							  	  data.message);
+			}
+		});
+	});
+}
 
 function updateUIWithSessionStartTime(date) {
 	$('#session-info').text('Session started at ' + date.toLocaleString());
