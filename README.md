@@ -12,5 +12,4 @@ With iOS debugging, you set breakpoints and use quick look to see if the image i
 
 - Firebase: To setup your own Cloud Storage and Firestore instances, [create a new project](http://console.firebase.google.com) with Firebase and perform the iOS setup procedures (adding the GoogleService-Info.plist and so on).
 
-- Web Client: Use MAMP or your favorite localhost tool to setup a server for the /Web directory, which will display all the images as you log them.
-
+- Web Client: Use [MAMP](https://www.mamp.info/en/) or your favorite localhost tool to setup a server for the /Web directory, which will display all the images as you log them. The only change you need to make is in `index.html`, adding your own Firebase configuration code (which can be obtained by creating a new web app in the Firebase console).
