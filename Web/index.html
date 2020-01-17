@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ImageDebugger Web</title>
+	<base href="/" />
+
+	<!-- Grid -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css">
+
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<!-- Standards -->
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+	<div class="row center-xs">
+		<div class="col-xs-12">
+			<h1>ImageDebugger Web</h1>
+			<h2 id="session-info">No data found. Try logging some images.</h2>
+			<p><a target="blank" href="https://github.com/shaandsingh/ImageDebugger/blob/master/README.md">Help</a></p>
+		</div>
+	</div>
+
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+
+	<!-- Firestore -->
+	<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+
+	<script>
+  		// YOUR FIREBASE CONFIGURATION HERE
+  		var firebaseConfig = {
+    		apiKey: "AIzaSyDeYx33PdkFMX-vHY0OXRDgQDfPeIvmKTA",
+    		authDomain: "ssimagedebugger.firebaseapp.com",
+    		databaseURL: "https://ssimagedebugger.firebaseio.com",
+    		projectId: "ssimagedebugger",
+    		storageBucket: "ssimagedebugger.appspot.com",
+    		messagingSenderId: "293005907716",
+    		appId: "1:293005907716:web:49e17fa6190adffc312251"
+  		};
+
+  		// Initialize Firebase
+  		firebase.initializeApp(firebaseConfig);
+	</script>
+
+	<!-- ImageDebugger -->
+	<script src="imagedebugger.js"></script>
+</body>
+</html>
