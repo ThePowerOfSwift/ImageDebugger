@@ -2,35 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>293005907716-c2cn4dh6m93aun8c0dbls97ej96hcr1q.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.293005907716-c2cn4dh6m93aun8c0dbls97ej96hcr1q</string>
-	<key>API_KEY</key>
-	<string>AIzaSyCw6uPUB21n4SzWL3QlU9Dw775pm0DeIio</string>
-	<key>GCM_SENDER_ID</key>
-	<string>293005907716</string>
-	<key>PLIST_VERSION</key>
-	<string>1</string>
-	<key>BUNDLE_ID</key>
-	<string>com.bluecocoa.ImageDebuggerExample</string>
-	<key>PROJECT_ID</key>
-	<string>ssimagedebugger</string>
-	<key>STORAGE_BUCKET</key>
-	<string>ssimagedebugger.appspot.com</string>
-	<key>IS_ADS_ENABLED</key>
-	<false></false>
-	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
-	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
-	<key>IS_GCM_ENABLED</key>
-	<true></true>
-	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
-	<key>GOOGLE_APP_ID</key>
-	<string>1:293005907716:ios:e8313b858a7cd7e7312251</string>
-	<key>DATABASE_URL</key>
-	<string>https://ssimagedebugger.firebaseio.com</string>
+	<key>REPLACE THIS FILE</key>
+	<string>You can get your own GoogleService-Info.plist file from the Firebase console.</string>
 </dict>
 </plist>
