@@ -12,9 +12,14 @@ sessionsRef.orderBy('sessionStartTime', 'desc').limit(1)
 	});
 });
 
+// IDs of the images that we currently have displayed.
+// (Firestore returns them as it receives them, and it receives them out of order.)
+var currentImages = [];
+
 // Remove all images on the page
 function clearOldData() {
 	$('#images').empty();
+	currentImages = [];
 }
 
 // Get and insert all images from session doc
@@ -31,7 +36,8 @@ function getDataFromSession(sessionDoc) {
 			if (change.type === "added") {
 				// NEW IMAGE
 				var data = change.doc.data();
-				updateUIWithImage(data.captureTime.toDate(),
+				updateUIWithImage(change.doc.id,
+								  data.captureTime.toDate(),
 							  	  data.link,
 							  	  data.message);
 			}
@@ -43,6 +49,35 @@ function updateUIWithSessionStartTime(date) {
 	$('#session-info').text('Session started at ' + date.toLocaleString());
 }
 
-function updateUIWithImage(date, link, message) {
-	$('#images').prepend('<div class="row"><div class="col-xs-9 center-xs"><img src="' + link + '" alt="' + message + '"></div><div class="col-xs"><p>' + message + '</p><p>Logged at ' + date.toLocaleString() + '</p><p><a href="' + link + '">Download</a></p></div></div>');
+function updateUIWithImage(id, date, link, message) {
+	var html = '<div id="' + id + '" class="row"><div class="col-xs-9 center-xs"><img src="' + link + '" alt="' + message + '"></div><div class="col-xs"><p>' + message + '</p><p>Logged at ' + date.toLocaleString() + '</p><p><a href="' + link + '">Download</a></p></div></div>';
+	var idInt = parseInt(id);
+	if (idInt == 0) {
+		// First image goes to the top of #images
+		currentImages.unshift(0);
+		$('#images').prepend(html);
+	} else if (currentImages.length == 0) {
+		// Not the first image but we don't have any images yet, so insert it anywhere
+		currentImages.push(idInt);
+		$('#images').append(html);
+	} else {
+		// Guaranteed to have at least one image in the array, so add this one and sort
+		currentImages.push(idInt);
+		currentImages.sort(function(a, b) {
+			return a - b;
+		});
+
+		// Find its index
+		var idx = currentImages.indexOf(idInt);
+		if (idx > 0) {
+			// Find the previous ID
+			var lastID = currentImages[idx - 1];
+
+			// And insert our image in the UI after it
+			$('#' + lastID).after(html);
+		} else {
+			// Not image 0 but its slot is currently 0
+			$('#images').prepend(html);
+		}
+	}
 }

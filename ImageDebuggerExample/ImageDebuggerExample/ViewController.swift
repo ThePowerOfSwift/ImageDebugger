@@ -90,10 +90,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         debugger.log(pre, withMessage: "Pre-processed image; ready for edge detection")
         
         // Find edges
-        var edges = processor.findEdges(pre)
-        
-        // Rotate the final image back to portrait orientation
-        edges = UIImage(cgImage: edges.cgImage!, scale: 1, orientation: .left)
+        let edges = processor.findEdges(pre)
         
         debugger.log(edges, withMessage: "Final canny result")
         
