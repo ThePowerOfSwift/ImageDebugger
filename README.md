@@ -6,10 +6,14 @@ With iOS debugging, you set breakpoints and use quick look to see if the image i
 
 ## How it works
 
-- Code: One class in Swift (`ImageDebugger`) that you can download and drop into your project, for near-instantaneous use.
+- Code: One class in Swift (`ImageDebugger`) that you can download and drop into your project, for near-instantaneous use. You can find it at [ImageDebuggerExample/ImageDebuggerExample/ImageDebugger.swift](ImageDebuggerExample/ImageDebuggerExample/ImageDebugger.swift).
 
 - Dependencies: Any images you log are uploaded to Firebase Cloud Storage, and the references to each image are stored and organized in Firestore. If using CocoaPods, add `pod 'Firebase/Firestore'` and `pod 'Firebase/Storage'` to your Podfile.
 
-- Firebase: To setup your own Cloud Storage and Firestore instances, [create a new project](http://console.firebase.google.com) with Firebase and perform the iOS setup procedures (adding the GoogleService-Info.plist and so on).
+- Firebase: To setup your own Cloud Storage and Firestore instances, [create a new project](http://console.firebase.google.com) with Firebase and perform the iOS setup procedures (adding the GoogleService-Info.plist to your Xcode project and so on).
 
 - Web Client: Use [MAMP](https://www.mamp.info/en/) or your favorite localhost tool to setup a server for the /Web directory, which will display all the images as you log them. The only change you need to make is in `index.html`, adding your own Firebase configuration code (which can be obtained by creating a new web app in the Firebase console).
+
+## Example
+
+Try the ImageDebuggerExample project to get a sense of how ImageDebugger works. The example uses OpenCV to analyze the edges in every frame that comes in from the camera. It uses ImageDebugger to ensure that all the processing is happening correctly. Run `pod install` before building the project.
