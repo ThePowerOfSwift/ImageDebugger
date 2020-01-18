@@ -24,8 +24,7 @@ class ImageDebugger {
     private(set) var logsLeftForUnblock: Int = 0
     
     /**
-     `blockLogsFor(_:)` and `blockNextLogs(_:)` can block ImageDebugger from uploading images.
-     When a block ends, this is set to true. It resets to false after the next successful `log` call.
+     `blockLogsFor(_:)` and `blockNextLogs(_:)` can block ImageDebugger from uploading images. When a block ends, this is set to true. It resets to false after the next successful `log` call.
      
      `blockNextLogs(2) -> log(image...) -> log(image...) -> unblockOccurred -> log(image...) -> !unblockOccurred`
      */
@@ -39,6 +38,11 @@ class ImageDebugger {
     
     /// Used to maximize CPU resources while uploading images
     private let uploadQueue = OperationQueue()
+    
+    /**
+     When logging a `UIImage` with an `imageOrientation` that is not `.up`, the orientation will be lost because `imageOrientation` is merely a flag that adjusts the display of `UIImage`s (it is not a representation of an image's actual orientation). Setting `shouldFixOrientationBeforeUpload` to true ensures that the logged image will match the `imageOrientation` flag because the debugger will manually redraw it before upload. This may affect your app's performance, and if it does, you can use `blockLogsFor(_:)` and/or `blockNextLogs(_:)` to compensate. To avoid using this setting altogether, try to fix the orientation earlier in your pipeline (for example, by ensuring your video stream outputs correctly oriented frames before applying any image processing).
+     */
+    public var shouldFixOrientationBeforeUpload = false
     
     init() {
         storageSessionRef = Storage.storage()
@@ -93,9 +97,15 @@ class ImageDebugger {
         
         // Upload image to Storage and log info on Firestore
         uploadQueue.addOperation { [weak self] in
-            if let data = self?.jpegData(uiImage, compressionQuality: 1.0) {
-                self?.uploadImage(data, withID: id) { (url) in
-                    self?.storeDocument(for: url, withID: id, takenAt: now, message: message)
+            guard let self = self else { return }
+            
+            // Fix orientation if requested
+            let imageToUpload = self.shouldFixOrientationBeforeUpload ? self.redrawImageFromFlaggedOrientation(uiImage) : uiImage
+            
+            // Convert UIImage to JPEG data, then upload
+            if let data = self.jpegData(imageToUpload, compressionQuality: 1.0) {
+                self.uploadImage(data, withID: id) { (url) in
+                    self.storeDocument(for: url, withID: id, takenAt: now, message: message)
                 }
             } else {
                 print("ImageDebugger failed to convert image to appropriate format. Log failed.")
@@ -202,6 +212,63 @@ class ImageDebugger {
         
         // ALL CHECKS PASSED
         return true
+    }
+    
+    /// Bakes the `imageOrientation` value into the drawing of a UIImage.
+    /// UIImage must be backed by an underlying CGImage.
+    private func redrawImageFromFlaggedOrientation(_ image: UIImage) -> UIImage {
+        guard let cgImage = image.cgImage else { return image }
+        
+        if image.imageOrientation == .up { return image }
+        
+        var transform = CGAffineTransform.identity
+        
+        // Capture orientation
+        switch image.imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: image.size.width, y: image.size.height)
+            transform = transform.rotated(by: .pi)
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: image.size.width, y: 0)
+            transform = transform.rotated(by: .pi / 2)
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: image.size.height)
+            transform = transform.rotated(by: -.pi / 2)
+        default:
+            break
+        }
+        
+        // Capture mirror
+        switch image.imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform.translatedBy(x: image.size.width, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+        case .leftMirrored, .rightMirrored:
+            transform.translatedBy(x: image.size.height, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+        default:
+            break
+        }
+        
+        // Re-draw
+        if let context = CGContext(data: nil, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: cgImage.colorSpace!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) {
+            
+            context.concatenate(transform)
+            
+            switch image.imageOrientation {
+            case .left, .leftMirrored, .right, .rightMirrored:
+                context.draw(cgImage, in: CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width))
+            default:
+                context.draw(cgImage, in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+            }
+            
+            if let finalImage = context.makeImage() {
+                return UIImage(cgImage: finalImage)
+            }
+        }
+        
+        // Failed
+        return image
     }
     
     /// Get JPEG data from a UIImage

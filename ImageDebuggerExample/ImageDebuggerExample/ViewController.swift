@@ -54,6 +54,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         // Start streaming from the camera
         if captureSession.canAddOutput(videoOutput) {
             captureSession.addOutput(videoOutput)
+            
+            // Ensure portrait orientation output
+            if let connection = videoOutput.connection(with: .video) {
+                connection.videoOrientation = .portrait
+            }
+            
             captureSession.startRunning()
         }
     }
@@ -87,7 +93,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         var edges = processor.findEdges(pre)
         
         // Rotate the final image back to portrait orientation
-        edges = UIImage(cgImage: edges.cgImage!, scale: 1, orientation: .right)
+        edges = UIImage(cgImage: edges.cgImage!, scale: 1, orientation: .left)
         
         debugger.log(edges, withMessage: "Final canny result")
         
