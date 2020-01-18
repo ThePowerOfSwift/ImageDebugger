@@ -61,11 +61,8 @@ function updateUIWithImage(id, date, link, message) {
 		currentImages.push(idInt);
 		$('#images').append(html);
 	} else {
-		// Guaranteed to have at least one image in the array, so add this one and sort
-		currentImages.push(idInt);
-		currentImages.sort(function(a, b) {
-			return a - b;
-		});
+		// Guaranteed to have at least one image in the array, so add this one in its correct position
+		currentImages.splice(locationOf(idInt, currentImages) + 1, 0, idInt);
 
 		// Find its index
 		var idx = currentImages.indexOf(idInt);
@@ -79,5 +76,20 @@ function updateUIWithImage(id, date, link, message) {
 			// Not image 0 but its slot is currently 0
 			$('#images').prepend(html);
 		}
+	}
+}
+
+// Fast sorted array insertion
+function locationOf(element, array, start, end) {
+	start = start || 0;
+	end = end || array.length;
+	var pivot = parseInt(start + (end - start) / 2, 10);
+	if (array[pivot] === element) return pivot;
+	if (end - start <= 1)
+		return array[pivot] > element ? pivot - 1 : pivot;
+	if (array[pivot] < element) {
+		return locationOf(element, array, pivot, end);
+	} else {
+		return locationOf(element, array, start, pivot);
 	}
 }
