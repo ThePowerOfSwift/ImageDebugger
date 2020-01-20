@@ -20,6 +20,7 @@ var currentImages = [];
 function clearOldData() {
 	$('#images').empty();
 	currentImages = [];
+	setBottomStickyEnabled(true);
 }
 
 // Get and insert all images from session doc
@@ -49,6 +50,31 @@ function updateUIWithSessionStartTime(date) {
 	$('#session-info').text('Session started at ' + date.toLocaleString());
 }
 
+// When true, updateUIWithImage will scroll to the bottom with every appended image
+var isBottomStickyEnabled = true;
+
+// Disable sticking when the user scrolls away from the bottom
+$(window).scroll(function() {
+	if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+		setBottomStickyEnabled(true);
+	} else {
+		setBottomStickyEnabled(false);
+	}
+});
+
+function setBottomStickyEnabled(enabled) {
+	isBottomStickyEnabled = enabled;
+	if (enabled) {
+		if (location.hash != '#latest') {
+			location.href = '#latest';
+		}
+	} else {
+		if (location.hash == '#latest') {
+			history.pushState(null, null, ' ');
+		}
+	}
+}
+
 function updateUIWithImage(id, date, link, message) {
 	var html = '<div id="' + id + '" class="row"><div class="col-xs-9 center-xs"><img src="' + link + '" alt="' + message + '"></div><div class="col-xs"><p>' + message + '</p><p>Logged at ' + date.toLocaleString() + '</p><p><a href="' + link + '">Download</a></p></div></div>';
 	var idInt = parseInt(id);
@@ -76,6 +102,11 @@ function updateUIWithImage(id, date, link, message) {
 			// Not image 0 but its slot is currently 0
 			$('#images').prepend(html);
 		}
+	}
+
+	// Scroll to new bottom
+	if (isBottomStickyEnabled) {
+		location.href = '#latest';
 	}
 }
 
