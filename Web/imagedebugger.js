@@ -55,7 +55,7 @@ var isBottomStickyEnabled = true;
 
 // Disable sticking when the user scrolls away from the bottom
 $(window).scroll(function() {
-	if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+	if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
 		setBottomStickyEnabled(true);
 	} else {
 		setBottomStickyEnabled(false);
