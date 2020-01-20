@@ -17,3 +17,25 @@ With iOS debugging, you set breakpoints and use quick look to see if the image i
 ## Example
 
 Try the ImageDebuggerExample project to get a sense of how ImageDebugger works. The example uses OpenCV to analyze the edges in every frame that comes in from the camera. It uses ImageDebugger to ensure that all the processing is happening correctly. Run `pod install` before building the project.
+
+**iOS app and web client configured in Firebase:**
+
+<img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/AppsInFirebase.png" width="432">
+
+**ImageDebuggerExample app detects edges in real-time:**
+
+<img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/iOSApp.png" width="375">
+
+**ImageDebugger class stores logged images in Cloud Storage:**
+
+<img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Storage.png">
+
+**And additional metadata in Firestore:**
+
+<img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Firestore.png">
+
+**Logged images are displayed on web client:**
+
+<img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Web1.png">
+
+<img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Web2.png">
