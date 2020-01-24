@@ -39,3 +39,7 @@ Try the ImageDebuggerExample project to get a sense of how ImageDebugger works. 
 <img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Web1.png">
 
 <img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Web2.png">
+
+## Questions
+
+Email shaansingh@college.harvard.edu.
