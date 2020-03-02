@@ -1,4 +1,4 @@
-## ImageDebugger
+# ImageDebugger
 
 The trouble with developing augmented reality and live image processing apps is that you often have to test specific frames of the camera's input for debugging purposes. Were the contours drawn? Is the perspective fixed? Do I need to adjust this threshold?
 
@@ -39,7 +39,3 @@ Try the ImageDebuggerExample project to get a sense of how ImageDebugger works. 
 <img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Web1.png">
 
 <img src="https://raw.githubusercontent.com/shaandsingh/ImageDebugger/master/READMEAssets/Web2.png">
-
-## Questions
-
-Email shaansingh@college.harvard.edu.
